@@ -20,7 +20,7 @@ export const Login =  async (req, res) => {
             if(err) throw new err;
 
             RedisClient.set(user.uuid.toString(), JSON.stringify({
-                token:refreshToken
+                token:refreshToken,
             }));
         })
 
@@ -82,24 +82,86 @@ export const Logout = async (req, res) =>{
 
 }
 
+export const Update = async  (req, res) => {
+
+    const {email, password} = req.body
+    const idParams = req.params.id;
+    const hashPassword = await argon2.hash(password);
+
+    try {
+        const update = await User.findOneAndUpdate({uuid:idParams.toString()}, {
+            email: email,
+            password:hashPassword
+        });
+    if(update){
+        return res.status(201).json({
+            message:"data berhasil di update",
+            data: {email, hashPassword}
+        })
+    }
+
+    return res.status(403).json({message:"Gagal di update, user not found"})
+
+    } catch (error) {
+        return res.status(403).json({message:"Error Server", error: error})
+    }
 
 
-export const GetData = (req, res) => {
-     res.status(200).json({
-        message:"success"
-     })
+ }
+
+  
+
+export const GetData =  async (req, res) => {
+
+    const id = req.user.id;
+    const key_getredis = "getdata";
+
+    const  {reply} = await get(key_getredis)
+
+    if(reply){
+        return res.json({
+            message: "get data from redis",
+            data:JSON.parse(reply)
+        });
+    }
+
+    const users =  await User.findOne({uuid:id});
+    const datafromDB = {
+        success: true,
+        message: "success fetch data from database",
+        data: users,
+        };
+
+    set(key_getredis, JSON.stringify(datafromDB));
+    return res.status(200).send(datafromDB);
 }
 
-export const Token =  (req, res) =>{
+
+export const Delete = async (req, res) =>{
+    try {
+
+        const idParams = req.params.id;
+        const deleted = await User.findOneAndRemove({uuid:idParams});
+        if(deleted){
+            return res.status(200).json({message:"data has been deleted"});
+        }
+        return res.status(403).json({message:"user not found!"})
+
+    } catch (error) {
+        return res.status(403).json(error)
+    }
+}
+
+export const Token =  async (req, res) =>{
 
     const id = req.user.id;
     const accessToken =  jwt.sign({id:id}, process.env.JWT_ACCESS_TOKEN, {expiresIn:60});
     const refreshToken =  jwt.sign({id:id}, process.env.JWT_REFRESH_SECRET, {expiresIn:3600});
 
-    RedisClient.get(id.toString(), (err, data) => {
+    await get(id.toString(), (err, data) => {
         if(err) throw new err;
 
-        RedisClient.set(id.toString(), JSON.stringify({
+         set(id.toString(), JSON.stringify({
             token:refreshToken
         }));
     })
@@ -112,3 +174,24 @@ export const Token =  (req, res) =>{
     })
 }
 
+
+function get(redis_key) {
+    return new Promise((resolve) => {
+      RedisClient.get(redis_key, (err, reply) => {
+        if (err) {
+        } else {
+          resolve({ reply });
+        }
+      });
+    });
+  }
+  
+  /**
+   * set redis cache
+   * @param {string} redis_key
+   * @param {string} redis_value
+   */
+
+  function set(redis_key, redis_value) {
+    RedisClient.set(redis_key, redis_value);
+  }

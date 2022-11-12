@@ -8,14 +8,7 @@ export const verifyToken = (req, res, next) => {
         const token = req.headers.authorization.split(' ')[1];
         const docoded = jwt.verify(token, process.env.JWT_ACCESS_TOKEN)
         req.user = docoded;
-
         req.token = token;
-        RedisClient.get('BL_' + docoded.id.toString(), (err, data) => {
-            if(err) throw err;
-
-            if(data === token) return res.status(401).json({status: false, message: "blacklisted token."});
-            next();
-        })        
         next();
 
     } catch (error) {
