@@ -1,0 +1,35 @@
+{
+  "name": "btpn",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/vh4/MERNJ.git"
+  },
+  "keywords": [
+    "MERNJ"
+  ],
+  "author": "fathoniwasesojati",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vh4/MERNJ/issues"
+  },
+  "homepage": "https://github.com/vh4/MERNJ#readme",
+  "dependencies": {
+    "argon2": "^0.30.2",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.7.2",
+    "nanoid": "^4.0.0",
+    "nodemon": "^2.0.20",
+    "redis": "^3.0.2"
+  }
+}
