@@ -16,35 +16,35 @@
 - Create User POST (Create)
 http://localhost:3000/users
 
----image---
+![alt text](https://github.com/vh4/btpn-betest/blob/btpn-test/image/createuser.jpg)
 
 - Login User POST
 http://localhost:3000/login
 
----image---
+![alt text](https://github.com/vh4/btpn-betest/blob/btpn-test/image/loginuser.jpg)
 
 - Get User GET (Read with Redis)
 http://localhost:3000/users
 
----image---
+![alt text](https://github.com/vh4/btpn-betest/blob/btpn-test/image/getuserbyredis.jpg)
 
 - Get Refresh Token GET (Read with Redis)
 http://localhost:3000/token
 
----image---
+![alt text](https://github.com/vh4/btpn-betest/blob/btpn-test/image/refreshToken.jpg)
 
 - update User PUT (Update) => /users/:id
 http://localhost:3000/users/cRTfhFNQmvO94I8aNlgRF4JJ
 
----image---
+![alt text](https://github.com/vh4/btpn-betest/blob/btpn-test/image/successupdate.jpg)
 
 
 - delete User DELETE (delete) /users/:id
 http://localhost:3000/users/cRTfhFNQmvO94I8aNlgRF4JJ
 
----image---
+![alt text](https://github.com/vh4/btpn-betest/blob/btpn-test/image/delete.jpg)
 
 
-- Redis Chace
+- Redis cache
 
----image---
+![alt text](https://github.com/vh4/btpn-betest/blob/btpn-test/image/redisCache.jpg)
